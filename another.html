@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WizdKing - Your Business Solution</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<style>
+    
+</style>
+<body>
+    <div id="app">
+        <header>
+            <h1>WizdKing</h1>
+            <nav>
+                <a href="#products">Products</a>
+                <a href="#contact">Contact</a>
+                <a href="#about">About</a>
+            </nav>
+        </header>
+
+        <main>
+            <section id="hero">
+                <h2>Welcome to WizdKing Solutions</h2>
+                <p>Your one-stop shop for all needs in Kigali, Rwanda</p>
+            </section>
+
+            <product-search></product-search>
+            
+            <section id="features">
+                <div class="feature-box">
+                    <h3>Easy Ordering</h3>
+                    <p>Find and order products quickly</p>
+                </div>
+                <div class="feature-box">
+                    <h3>Fast Delivery</h3>
+                    <p>Across Kigali and beyond</p>
+                </div>
+            </section>
+
+            <contact-form></contact-form>
+            <image-upload></image-upload>
+            <payment-form></payment-form>
+        </main>
+
+        <footer>
+            <div class="contact-info">
+                <h3>Contact Us</h3>
+                <p>📞 <a href="tel:+250796322110">0796322110</a></p>
+                <p>📧 <a href="mailto:wizdking99@gmail.com">wizdking99@gmail.com</a></p>
+                <p>📍 Kigali, Rwanda</p>
+            </div>
+            <div class="social-links">
+                <!-- Add your social media links here -->
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WizdKing - Your Business Solution</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>WizdKing</h1>
+            <nav>
+                <a href="#products">Products</a>
+                <a href="#contact">Contact</a>
+                <a href="#about">About</a>
+            </nav>
+        </header>
+
+        <main>
+            <section id="hero">
+                <h2>Welcome to WizdKing Solutions</h2>
+                <p>Your one-stop shop for all needs in Kigali, Rwanda</p>
+            </section>
+
+            <product-search></product-search>
+            
+            <section id="features">
+                <div class="feature-box">
+                    <h3>Easy Ordering</h3>
+                    <p>Find and order products quickly</p>
+                </div>
+                <div class="feature-box">
+                    <h3>Fast Delivery</h3>
+                    <p>Across Kigali and beyond</p>
+                </div>
+            </section>
+
+            <contact-form></contact-form>
+            <image-upload></image-upload>
+            <payment-form></payment-form>
+        </main>
+
+        <footer>
+            <div class="contact-info">
+                <h3>Contact Us</h3>
+                <p>📞 <a href="tel:+250796322110">0796322110</a></p>
+                <p>📧 <a href="mailto:wizdking99@gmail.com">wizdking99@gmail.com</a></p>
+                <p>📍 Kigali, Rwanda</p>
+            </div>
+            <div class="social-links">
+                <!-- Add your social media links here -->
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    const { createApp } = Vue;
+
+// Product Search Component
+const ProductSearch = {
+    template: `
+        <section id="products" class="product-search">
+            <h2>Find Products</h2>
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    v-model="searchQuery" 
+                    placeholder="Search products..." 
+                    @input="searchProducts"
+                >
+                <button @click="searchProducts">Search</button>
+            </div>
+            
+            <div v-if="loading" class="loading">Loading...</div>
+            
+            <div v-if="products.length" class="product-grid">
+                <div v-for="product in filteredProducts" :key="product.id" class="product-card">
+                    <img :src="product.image" :alt="product.name">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.price }}</p>
+                    <button @click="addToCart(product)">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div v-else-if="!loading" class="no-results">
+                No products found. Try a different search.
+            </div>
+        </section>
+    `,
+    data() {
+        return {
+            searchQuery: '',
+            products: [],
+            filteredProducts: [],
+            loading: false
+        }
+    },
+    methods: {
+        async searchProducts() {
+            this.loading = true;
+            // Simulate API call
+            setTimeout(() => {
+                this.products = [
+                    { id: 1, name: 'Product 1', price: '$20', image: 'assets/product1.jpg' },
+                    { id: 2, name: 'Product 2', price: '$35', image: 'assets/product2.jpg' },
+                    { id: 3, name: 'Product 3', price: '$15', image: 'assets/product3.jpg' }
+                ];
+                this.filteredProducts = this.products.filter(product => 
+                    product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+                );
+                this.loading = false;
+            }, 500);
+        },
+        addToCart(product) {
+            alert(`Added ${product.name} to cart!`);
+        }
+    },
+    mounted() {
+        this.searchProducts();
+    }
+};
+
+// Contact Form Component
+const ContactForm = {
+    template: `
+        <section id="contact" class="contact-form">
+            <h2>Contact Us</h2>
+            <form @submit.prevent="submitForm">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" v-model="form.name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" v-model="form.email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" v-model="form.message" required></textarea>
+                </div>
+                
+                <button type="submit">Send Message</button>
+                
+                <div v-if="success" class="success-message">
+                    Thank you! We'll contact you soon.
+                </div>
+            </form>
+            
+            <div class="direct-contact">
+                <p>Or reach us directly:</p>
+                <p>Phone: <a href="tel:+250796322110">0796322110</a></p>
+                <p>Email: <a href="mailto:wizdking99@gmail.com">wizdking99@gmail.com</a></p>
+                <p>Location: Kigali, Rwanda</p>
+            </div>
+        </section>
+    `,
+    data() {
+        return {
+            form: {
+                name: '',
+                email: '',
+                message: ''
+            },
+            success: false
+        }
+    },
+    methods: {
+        submitForm() {
+            // Simulate form submission
+            console.log('Form submitted:', this.form);
+            this.success = true;
+            this.form = { name: '', email: '', message: '' };
+            setTimeout(() => this.success = false, 3000);
+        }
+    }
+};
+
+// Image Upload Component
+const ImageUpload = {
+    template: `
+        <section class="image-upload">
+            <h2>Upload Images</h2>
+            <div class="upload-container">
+                <input 
+                    type="file" 
+                    accept="image/*" 
+                    multiple 
+                    @change="handleFileUpload"
+                >
+                <div v-if="previewImages.length" class="preview-grid">
+                    <div v-for="(image, index) in previewImages" :key="index" class="preview-item">
+                        <img :src="image.url" :alt="image.name">
+                        <button @click="removeImage(index)">×</button>
+                    </div>
+                </div>
+                <button @click="uploadImages" :disabled="!previewImages.length">
+                    Upload Images
+                </button>
+            </div>
+        </section>
+    `,
+    data() {
+        return {
+            files: [],
+            previewImages: []
+        }
+    },
+    methods: {
+        handleFileUpload(event) {
+            this.files = Array.from(event.target.files);
+            this.previewImages = [];
+            
+            this.files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.previewImages.push({
+                        name: file.name,
+                        url: e.target.result
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+        },
+        removeImage(index) {
+            this.previewImages.splice(index, 1);
+            },
+        uploadImages() {
+            // Simulate upload
+            alert(`Uploading ${this.previewImages.length} images...`);
+            this.previewImages = [];
+            this.files = [];
+        }
+    }
+};
+
+// Payment Form Component
+const PaymentForm = {
+    template: `
+        <section id="payment" class="payment-form">
+            <h2>Make a Payment</h2>
+            <form @submit.prevent="processPayment">
+                <div class="form-group">
+                    <label for="amount">Amount ($):</label>
+                    <input 
+                        type="number" 
+                        id="amount" 
+                        v-model="payment.amount" 
+                        min="1" 
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="method">Payment Method:</label>
+                    <select id="method" v-model="payment.method" required>
+                        <option value="">Select method</option>
+                        <option value="mobile_money">Mobile Money</option>
+                        <option value="card">Credit Card</option>
+                        <option value="bank">Bank Transfer</option>
+                    </select>
+                </div>
+                
+                <div v-if="payment.method === 'mobile_money'" class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        v-model="payment.phone" 
+                        placeholder="e.g., 0796322110"
+                        required
+                    >
+                </div>
+                
+                <div v-if="payment.method === 'card'" class="form-group">
+                    <label for="card">Card Details:</label>
+                    <input 
+                        type="text" 
+                        id="card" 
+                        v-model="payment.card" 
+                        placeholder="Card number"
+                        required
+                    >
+                </div>
+                
+                <button type="submit">Pay Now</button>
+                
+                <div v-if="paymentSuccess" class="success-message">
+                    Payment successful! Thank you.
+                </div>
+            </form>
+        </section>
+    `,
+    data() {
+        return {
+            payment: {
+                amount: '',
+                method: '',
+                phone: '',
+                card: ''
+            },
+            paymentSuccess: false
+        }
+    },
+    methods: {
+        processPayment() {
+            // Simulate payment processing
+            console.log('Processing payment:', this.payment);
+            this.paymentSuccess = true;
+            this.payment = { amount: '', method: '', phone: '', card: '' };
+            setTimeout(() => this.paymentSuccess = false, 3000);
+        }
+    }
+};
+
+// Create Vue App
+const app = createApp({
+    components: {
+        'product-search': ProductSearch,
+        'contact-form': ContactForm,
+        'image-upload': ImageUpload,
+        'payment-form': PaymentForm
+    }
+});
+
+app.mount('#app');
+</body>
+</html>
